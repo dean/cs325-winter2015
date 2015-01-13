@@ -3,13 +3,31 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 
-% \newtheorem{theorem}{Theorem}
+\newtheorem{problem}{Problem}
+\newtheorem{algorithm}{Algorithm}
+\setlength\parindent{0pt}
 
 \title{Group Assignment 1}
 \author{Chance Zibolski, Dean Johnson}
 
 \begin{document}
 \maketitle
+
+\begin{problem}
+Given an array of small integers $a[1,\ldots,n]$ (that contains a least one
+positive integer), compute
+\begin{eqnarray*}
+  \label{MaxSubArray}
+  \max_{i \leq j}\sum_{k=i}^{j}a[k]
+\end{eqnarray*}
+\end{problem}
+
+\begin{algorithm}
+\textbf{Enumeration}: Loop over each pair of indices $ i \leq j $ and
+compute the sum $\sum_{k=i}^{j}a[k]$
+\end{algorithm}
+
+Psuedocode:
 
 \begin{tabbing}
   {\sc MaxSubArray}$(n)$\\
@@ -18,5 +36,29 @@
   \> \qquad \= $x = x+i$\\
   \> return $x$
 \end{tabbing}
+
+
+\begin{algorithm}
+\textbf{Better Enumeration}: Notice that in the previous algorithm,  the
+same sum is computed many times.  In particular, notice that
+$\sum_{k=i}^{j}a[k]$ can be computed from $\sum_{k=i}^{j-1}a[k]$ in
+$\mathcal{O}(1)$ time, rather than starting from scratch. Write a new version
+of the first algorithm that takes advantage of this observation.
+
+\end{algorithm}
+
+\begin{algorithm}
+\textbf{Dynamic Programming}: Your dynamic programming algorithm should be
+based on the following idea:
+
+\begin{itemize}
+\item The maximum subarray either uses the last element in the input array,
+or it doesn't.
+\end{itemize}
+
+Describe the solution to the maximum subarray problem recursively and
+mathematically based on the above idea.
+
+\end{algorithm}
 
 \end{document}
