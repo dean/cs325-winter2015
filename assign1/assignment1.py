@@ -65,21 +65,24 @@ if __name__ == '__main__':
         print 'Size |   Alg 1   |   Alg2   |   Alg3   '
         timing_format = '{:<5} {:^11} {:^11} {:^11}'
         for size in xrange(100, 1001, 100):
-            arr = [random.randint(0, 100) for x in xrange(size)]
-            timing = []
-            for alg in [alg1, alg2, alg3]:
-                start = time.clock()
-                alg(arr)
-                timing.append(round(time.clock() - start, 11))
-            timing = [size] + timing
+            timings = [[], [], []]
+            for i in range(10):
+                arr = [random.randint(-100, 100) for x in xrange(size)]
+                for j, alg in enumerate([alg1, alg2, alg3]):
+                    start = time.clock()
+                    alg(arr)
+                    timings[j].append(round(time.clock() - start, 11))
+            timing = [size] + map(lambda x: sum(x)/float(len(x)), timings)
             print timing_format.format(*timing)
 
         #  Alg3 Only.
         for size in xrange(2000, 9001, 1000):
-            arr = [random.randint(0, 100) for x in xrange(size)]
-            timing = []
-            start = time.clock()
-            alg3(arr)
-            end = time.clock()
-            timing = [size, '', '', round(end - start, 11)]
+            timings = []
+            for i in range(10):
+                arr = [random.randint(0, 100) for x in xrange(size)]
+                start = time.clock()
+                alg3(arr)
+                timings.append(time.clock() - start)
+            t = round(sum(timings)/float(len(timings)), 11)
+            timing = [size, '', '', t]
             print timing_format.format(*timing)
