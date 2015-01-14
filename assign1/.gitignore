@@ -6,3 +6,5 @@
 !.gitignore
 !*.tex
 !makefile
+!*.py
+!timings.txt
