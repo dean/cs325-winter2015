@@ -24,7 +24,17 @@ def alg2(arr):
     return _max
 
 def alg3(arr):
-    pass
+    _max = 0
+    local_max = 0
+    for i in range(len(arr)):
+        tmp = local_max + arr[i]
+        if tmp < 0:
+            local_max = 0
+        else:
+            local_max = tmp
+        if local_max > _max:
+            _max = local_max
+    return _max
 
 if __name__ == '__main__':
     if not len(sys.argv) > 1:
@@ -42,11 +52,13 @@ if __name__ == '__main__':
             print 'Input: {0}'.format(arr)
             alg1_ans = alg1(arr)
             print 'Alg1: Got %d expected %d' % (alg1_ans, ans)
-            # assert(alg1(arr) == ans)
+            assert(alg1(arr) == ans)
             alg2_ans = alg2(arr)
             print 'Alg2: Got %d expected %d' % (alg2_ans, ans)
             assert(alg2(arr) == ans)
-            # Test here
+            alg3_ans = alg3(arr)
+            print 'Alg3: Got %d expected %d' % (alg3_ans, ans)
+            assert(alg3(arr) == ans)
 
     elif sys.argv[1] == '--time':
         random.seed(931915823)
@@ -55,22 +67,19 @@ if __name__ == '__main__':
         for size in xrange(100, 1001, 100):
             arr = [random.randint(0, 100) for x in xrange(size)]
             timing = []
-            for alg in [alg1, alg2]:
+            for alg in [alg1, alg2, alg3]:
                 start = time.clock()
                 alg(arr)
-                timing.append(time.clock() - start)
-            timing = [size] + timing + ['']
+                timing.append(round(time.clock() - start, 11))
+            timing = [size] + timing
             print timing_format.format(*timing)
 
-        '''
         #  Alg3 Only.
         for size in xrange(2000, 9001, 1000):
             arr = [random.randint(0, 100) for x in xrange(size)]
-            lines = sorted(map(lambda x: Line(*x), zip(ms, bs)), key=lambda x: x.m)
             timing = []
             start = time.clock()
-            alg(lines)
-            timing.append(time.clock() - start)
-            timing = [size, '', ''] + timing + [0]
+            alg3(arr)
+            end = time.clock()
+            timing = [size, '', '', round(end - start, 11)]
             print timing_format.format(*timing)
-        '''
