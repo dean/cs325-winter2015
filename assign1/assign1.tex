@@ -79,7 +79,7 @@ MaxSubArray(a[1, ..., n])
 
 \subsection*{Number of operations}
 \begin{eqnarray*}
-  \sum_{i=1}^{n}\sum_{j=i}^{n}a[k]
+  \sum_{i=1}^{n}\sum_{j=i}^{n}a[j]
 \end{eqnarray*}
 
 \subsection*{Asymptotic bounds}
@@ -102,5 +102,67 @@ or it doesn't.
 Describe the solution to the maximum subarray problem recursively and
 mathematically based on the above idea.
 \end{algorithm}
+
+\section*{Recursive Formula}
+
+\[
+  MaxSubArray(a[1, \ldots, n]) =
+  \begin{cases}
+      MaxSubArray\left(a[1, \ldots, \frac{n}{2}]\right)\\
+      MaxSubArray\left(a[\frac{n}{2}, \ldots, n]\right)\\
+      MaxSuffix\left(a[1, \ldots, \frac{n}{2}]\right) +
+      MaxPrefix\left(a[\frac{n}{2}, \ldots, n]\right)\\
+  \end{cases}
+\]
+
+\begin{verbatim}
+MaxSuffix(a[low, ..., mid])
+  max = 0
+  sum = 0
+  for i = mid, ..., low
+    sum = sum + a[i]
+    if sum > max
+      max = sum
+  return max
+
+MaxSuffix(a[mid, ..., high])
+  max = 0
+  sum = 0
+  for i = mid, ..., high
+    sum = sum + a[i]
+    if sum > max
+      max = sum
+  return max
+\end{verbatim}
+
+\section*{Psuedocode}
+
+\begin{verbatim}
+MaxSubArray(a[1, ..., n])
+  max = 0
+  sum = 0
+  for i = 1, ..., n
+    sum = sum + a[i]
+    if sum < 0
+      sum = 0
+    if sum > max
+      max = sum
+  return max
+\end{verbatim}
+
+\section*{Run-time analysis}
+
+\subsection*{Number of operations}
+\begin{eqnarray*}
+  \sum_{i=1}^{n}a[i]
+\end{eqnarray*}
+
+\subsection*{Asymptotic bounds}
+\begin{eqnarray*}
+    (\mathcal{O}(n) \text{i iterations}) \times
+    (\mathcal{O}(c) \text{to compute sum}) = \mathcal{O}(n)
+\end{eqnarray*}
+
+
 
 \end{document}
