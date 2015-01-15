@@ -3,7 +3,6 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 
-\newtheorem{problem}{Problem}
 \newtheorem{algorithm}{Algorithm}
 \setlength\parindent{0pt}
 
@@ -13,30 +12,46 @@
 \begin{document}
 \maketitle
 
-\begin{problem}
+\section*{Problem}
 Given an array of small integers $a[1,\ldots,n]$ (that contains a least one
 positive integer), compute
 \begin{eqnarray*}
   \label{MaxSubArray}
   \max_{i \leq j}\sum_{k=i}^{j}a[k]
 \end{eqnarray*}
-\end{problem}
+
 
 \begin{algorithm}
 \textbf{Enumeration}: Loop over each pair of indices $ i \leq j $ and
 compute the sum $\sum_{k=i}^{j}a[k]$
 \end{algorithm}
 
-Psuedocode:
+\section*{Psuedocode}
 
-\begin{tabbing}
-  {\sc MaxSubArray}$(n)$\\
-  \qquad \= $x = 0$ \\
-  \> for $i = 1, \ldots, n$\\
-  \> \qquad \= $x = x+i$\\
-  \> return $x$
-\end{tabbing}
+\begin{verbatim}
+MaxSubArray(a[1, ..., n])
+  max_sum = 0
+  sum = 0
+  for i = 1, ..., n
+    for j = i, ..., n
+      for k = i, ..., j
+        sum = sum + a[k]
+      if sum > max_sum
+        max_sum = sum
+  return max_sum
+\end{verbatim}
 
+\section*{Run-time analysis}
+
+\subsection*{Number of operations}
+\begin{eqnarray*}
+  \sum_{i=1}^{n}\sum_{j=i}^{n}\sum_{k=i}^{j}a[k]
+\end{eqnarray*}
+
+\subsection*{Asymptotic bounds}
+\begin{eqnarray*}
+    (\mathcal{O}(n^2) \times (\mathcal{O}(n) \text{time to compute each sum})) = \mathcal{O}(n^3)
+\end{eqnarray*}
 
 \begin{algorithm}
 \textbf{Better Enumeration}: Notice that in the previous algorithm,  the
@@ -44,8 +59,36 @@ same sum is computed many times.  In particular, notice that
 $\sum_{k=i}^{j}a[k]$ can be computed from $\sum_{k=i}^{j-1}a[k]$ in
 $\mathcal{O}(1)$ time, rather than starting from scratch. Write a new version
 of the first algorithm that takes advantage of this observation.
-
 \end{algorithm}
+
+\section*{Psuedocode}
+
+\begin{verbatim}
+MaxSubArray(a[1, ..., n])
+  max_sum = 0
+  for i = 1, ..., n
+    sum = 0
+    for j = i, ..., n
+      sum = sum + a[j]
+      if sum > max_sum
+        max_sum = sum
+  return max_sum
+\end{verbatim}
+
+\section*{Run-time analysis}
+
+\subsection*{Number of operations}
+\begin{eqnarray*}
+  \sum_{i=1}^{n}\sum_{j=i}^{n}a[k]
+\end{eqnarray*}
+
+\subsection*{Asymptotic bounds}
+\begin{eqnarray*}
+    ((\mathcal{O}(n) \text{i-iterations}) \times
+    (\mathcal{O}(n) \text{j-iterations}) \times
+    (\mathcal{O}(n) \text{time to update sum}) ) = \mathcal{O}(n^2)
+\end{eqnarray*}
+
 
 \begin{algorithm}
 \textbf{Dynamic Programming}: Your dynamic programming algorithm should be
@@ -58,7 +101,6 @@ or it doesn't.
 
 Describe the solution to the maximum subarray problem recursively and
 mathematically based on the above idea.
-
 \end{algorithm}
 
 \end{document}
