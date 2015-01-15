@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('pdf')
+matplotlib.use('ps')
 
 import matplotlib.pyplot as plt
 
@@ -24,7 +24,7 @@ def make_graph(vals):
     subplots[1].set_ylabel('Average Runtime (10 Runs)')
     subplots[1].set_xlabel('Input Size')
 
-    plt.savefig('timings.pdf')
+    plt.savefig('timings.ps')
 
 if __name__ == '__main__':
     vals = map(lambda x: map(lambda z: float(z.strip()), filter(lambda y: y, x.split(' '))), open('timings.txt', 'r').readlines()[1:])
