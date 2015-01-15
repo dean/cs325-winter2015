@@ -1,6 +1,5 @@
 import random
 import time
-import urllib2
 import sys
 
 
@@ -13,6 +12,7 @@ def enum(arr):
                 _max = _sum
     return _max
 
+
 def better_enum(arr):
     _max = 0
     for i in range(len(arr)):
@@ -23,17 +23,18 @@ def better_enum(arr):
                 _max = _sum
     return _max
 
+
 def dynamic(arr):
     _max = 0
-    local_max = 0
+    _sum = 0
     for i in range(len(arr)):
-        tmp = local_max + arr[i]
+        tmp = _sum + arr[i]
         if tmp < 0:
-            local_max = 0
+            _sum = 0
         else:
-            local_max = tmp
-        if local_max > _max:
-            _max = local_max
+            _sum = tmp
+        if _sum > _max:
+            _max = _sum
     return _max
 
 if __name__ == '__main__':

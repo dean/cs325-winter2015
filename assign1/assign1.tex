@@ -2,6 +2,8 @@
 
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{graphicx}
+
 
 \newtheorem{algorithm}{Algorithm}
 \setlength\parindent{0pt}
@@ -159,10 +161,46 @@ MaxSubArray(a[1, ..., n])
 
 \subsection*{Asymptotic bounds}
 \begin{eqnarray*}
-    (\mathcal{O}(n) \text{i iterations}) \times
+    (\mathcal{O}(n) \text{i-iterations}) \times
     (\mathcal{O}(c) \text{to compute sum}) = \mathcal{O}(n)
 \end{eqnarray*}
 
+\section{Graphs}
 
+\includegraphics[width=\textwidth]{timings}
+
+\subsubsection*{Slope comparision}
+
+During our experiments we obtained the following slopes for our algorithms:
+
+\begin{itemize}
+\item Algorithm 1: 0.3800
+\item Algorithm 2: 0.5048
+\item Algorithm 3: 1.0050
+\end{itemize}
+
+This would give us the following runtime complexity for each algorithm:
+
+\begin{itemize}
+    \item Algorithm 1: $\mathcal{\theta}(n^{0.3800})$
+    \item Algorithm 2: $\mathcal{\theta}(n^{0.5048})$
+    \item Algorithm 3: $\mathcal{\theta}(n^{1.0050})$
+\end{itemize}
+
+For our last algorithm, the experimental runtime analysis is accurate to what
+our theoretical running time. This accuracy can be attributed to the fact that
+the algorithms linear runtime and the ease of implementation compared to the
+other algorithms.
+
+The enumeration and better enumeration algorithms, (1 and 2) both had lower
+runtime complexities when measured than what we would expect. For algorithm 1
+we expected a runtime complexity of $\mathcal{\theta}(n^3)$ but instead ended
+up with $0.3800$ which could be caused by our experimental data being so small.
+The second algorithm we expected to run in $\mathcal{\theta}(n^2)$ time, but it
+actually ended up taking $\mathcal{\theta}(n^{\frac{1}{2}})$ which suggests we
+may have made an error when measuring our data, or the algorithm is wrong.
+However, the algorithm looks fundamentally correct, so I would attribute the
+error to the experimental data, and inconsistencies caused by computer caching,
+and such.
 
 \end{document}
