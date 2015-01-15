@@ -4,7 +4,7 @@ import urllib2
 import sys
 
 
-def alg1(arr):
+def enum(arr):
     _max = 0
     for i in range(len(arr)):
         for j in range(i, len(arr)):
@@ -13,7 +13,7 @@ def alg1(arr):
                 _max = _sum
     return _max
 
-def alg2(arr):
+def better_enum(arr):
     _max = 0
     for i in range(len(arr)):
         _sum = 0
@@ -23,7 +23,7 @@ def alg2(arr):
                 _max = _sum
     return _max
 
-def alg3(arr):
+def dynamic(arr):
     _max = 0
     local_max = 0
     for i in range(len(arr)):
@@ -50,38 +50,38 @@ if __name__ == '__main__':
             inp = map(int, test_set.replace(',', '').replace('[', '').replace(']', '').strip().split(' '))
             arr, ans = inp[:-1], inp[-1]
             print 'Input: {0}'.format(arr)
-            alg1_ans = alg1(arr)
-            print 'Alg1: Got %d expected %d' % (alg1_ans, ans)
-            assert(alg1(arr) == ans)
-            alg2_ans = alg2(arr)
-            print 'Alg2: Got %d expected %d' % (alg2_ans, ans)
-            assert(alg2(arr) == ans)
-            alg3_ans = alg3(arr)
-            print 'Alg3: Got %d expected %d' % (alg3_ans, ans)
-            assert(alg3(arr) == ans)
+            enum_ans = enum(arr)
+            print 'enum: Got %d expected %d' % (enum_ans, ans)
+            assert(enum(arr) == ans)
+            better_enum_ans = better_enum(arr)
+            print 'better_enum: Got %d expected %d' % (better_enum_ans, ans)
+            assert(better_enum(arr) == ans)
+            dynamic_ans = dynamic(arr)
+            print 'dynamic: Got %d expected %d\n' % (dynamic_ans, ans)
+            assert(dynamic(arr) == ans)
 
     elif sys.argv[1] == '--time':
         random.seed(931915823)
-        print 'Size |   Alg 1   |   Alg2   |   Alg3   '
+        print 'Size |   Alg 1   |   Alg 2  |   Alg 3   '
         timing_format = '{:<5} {:^11} {:^11} {:^11}'
         for size in xrange(100, 1001, 100):
             timings = [[], [], []]
             for i in range(10):
                 arr = [random.randint(-100, 100) for x in xrange(size)]
-                for j, alg in enumerate([alg1, alg2, alg3]):
+                for j, alg in enumerate([enum, better_enum, dynamic]):
                     start = time.clock()
                     alg(arr)
                     timings[j].append(round(time.clock() - start, 11))
             timing = [size] + map(lambda x: sum(x)/float(len(x)), timings)
             print timing_format.format(*timing)
 
-        #  Alg3 Only.
+        #  dynamic Only.
         for size in xrange(2000, 9001, 1000):
             timings = []
             for i in range(10):
                 arr = [random.randint(0, 100) for x in xrange(size)]
                 start = time.clock()
-                alg3(arr)
+                dynamic(arr)
                 timings.append(time.clock() - start)
             t = round(sum(timings)/float(len(timings)), 11)
             timing = [size, '', '', t]
