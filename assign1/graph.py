@@ -1,6 +1,10 @@
+import sys
+
 import matplotlib
+from scipy import stats
 matplotlib.use('ps')
 
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -27,10 +31,27 @@ def make_graph(vals):
     plt.savefig('timings.ps')
 
 if __name__ == '__main__':
+    if not len(sys.argv) > 1:
+        print 'Use --graph or --slope'
+
     vals = map(lambda x: map(lambda z: float(z.strip()), filter(lambda y: y, x.split(' '))), open('timings.txt', 'r').readlines()[1:])
     new_vals = [[], [], [], []]
-    for val_list in vals:
-        for j, thing in enumerate(val_list):
-            new_vals[j % 4].append(thing)
 
-    make_graph(new_vals)
+    if sys.argv[1] == '--graph':
+        for val_list in vals:
+            for j, thing in enumerate(val_list):
+                new_vals[j % 4].append(thing)
+
+        make_graph(new_vals)
+
+    if sys.argv[1] == '--slope':
+        for val_list in vals:
+            for j, thing in enumerate(val_list):
+                new_vals[j % 4].append(thing)
+
+        slope, intercept = np.polyfit(np.log(new_vals[1][:9]), np.log(new_vals[0][:9]), 1)
+        print 'Alg1 Slope: {0} Intercept: {1}'.format(slope, intercept)
+        for i in range(2):
+            slope, intercept = np.polyfit(np.log(new_vals[2+i]), np.log(new_vals[0]), 1)
+            print 'Alg{0} Slope: {1} Intercept: {2}'.format(i + 2, slope, intercept)
+
