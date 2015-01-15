@@ -40,7 +40,7 @@ if __name__ == '__main__':
     if not len(sys.argv) > 1:
         print 'Usage: python assignment1.py [option]'
         print 'Options:'
-        options = ['--test', '--time']
+        options = ['--test', '--time <# runs>']
         print '\n'.join(map(lambda x:'\t'+ x, options))
         sys.exit()
 
@@ -62,11 +62,12 @@ if __name__ == '__main__':
 
     elif sys.argv[1] == '--time':
         random.seed(931915823)
+        all_timings = [[], [], []]
         print 'Size |   Alg 1   |   Alg 2  |   Alg 3   '
         timing_format = '{:<5} {:^11} {:^11} {:^11}'
-        for size in xrange(100, 1001, 100):
+        for size in xrange(100, 1000, 100):
             timings = [[], [], []]
-            for i in range(10):
+            for i in range(int(sys.argv[2])):
                 arr = [random.randint(-100, 100) for x in xrange(size)]
                 for j, alg in enumerate([enum, better_enum, dynamic]):
                     start = time.clock()
@@ -74,15 +75,22 @@ if __name__ == '__main__':
                     timings[j].append(round(time.clock() - start, 11))
             timing = [size] + map(lambda x: sum(x)/float(len(x)), timings)
             print timing_format.format(*timing)
+            for i, t in enumerate(timings):
+                all_timings[i].append(t)
 
         #  dynamic Only.
-        for size in xrange(2000, 9001, 1000):
-            timings = []
-            for i in range(10):
-                arr = [random.randint(0, 100) for x in xrange(size)]
-                start = time.clock()
-                dynamic(arr)
-                timings.append(time.clock() - start)
-            t = round(sum(timings)/float(len(timings)), 11)
-            timing = [size, '', '', t]
+        for size in xrange(1000, 9001, 1000):
+            timings =[[], []]
+            for i in range(int(sys.argv[2])):
+                for j, alg in enumerate([better_enum, dynamic]):
+                    arr = [random.randint(0, 100) for x in xrange(size)]
+                    start = time.clock()
+                    alg(arr)
+                    timings[j].append(time.clock() - start)
+            t = round(sum(timings[0])/float(len(timings[0])), 11)
+            t2 = round(sum(timings[1])/float(len(timings[1])), 11)
+            timing = [size, 0, t, t2]
             print timing_format.format(*timing)
+            all_timings[0].append(0)
+            all_timings[1].append(t)
+            all_timings[2].append(t2)
