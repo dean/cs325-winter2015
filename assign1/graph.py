@@ -49,9 +49,9 @@ if __name__ == '__main__':
             for j, thing in enumerate(val_list):
                 new_vals[j % 4].append(thing)
 
-        slope, intercept = np.polyfit(np.log(new_vals[1][:9]), np.log(new_vals[0][:9]), 1)
+        slope, intercept = np.polyfit(np.log(new_vals[0][:9]), np.log(new_vals[1][:9]), 1)
         print 'Alg1 Slope: {0} Intercept: {1}'.format(slope, intercept)
         for i in range(2):
-            slope, intercept = np.polyfit(np.log(new_vals[2+i]), np.log(new_vals[0]), 1)
+            slope, intercept = np.polyfit(np.log(new_vals[0]), np.log(new_vals[2+i]), 1)
             print 'Alg{0} Slope: {1} Intercept: {2}'.format(i + 2, slope, intercept)
 
