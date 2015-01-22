@@ -5,7 +5,7 @@ import sys
 import urllib2
 
 
-def alg1(*args):
+def alg1(num_keys, num_lockers, num_balls, given_keys, desired_lockers):
     
     pass
 
