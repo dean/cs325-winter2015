@@ -5,9 +5,54 @@ import sys
 import urllib2
 
 
+def shortest_key_path(keys, locker):
+    shortest = 99999999999
+    for key in keys:
+        if key == locker:
+            return 0
+        if key > locker:
+            if key - locker < shortest:
+                shortest = key - locker
+        else:
+            if locker - key < shortest:
+                shortest = locker - key
+    return shortest
+
+def generate_combinations(combs):
+    if not combs:
+        return [[]]
+    new_combs = generate_combinations(combs[1:])
+    return (generate_combinations(combs[1:]) +
+            [[combs[0]] + x for x in generate_combinations(combs[1:])])
+
 def alg1(num_keys, num_lockers, num_balls, given_keys, desired_lockers):
-    
-    pass
+    combinations = generate_combinations(given_keys)
+    combinations = list(sorted(combinations, key=lambda x: len(x)))
+    desired_lockers.sort()
+    all_lockers = [0 if x not in desired_lockers else 1 for x in range(desired_lockers[-1] + 1)]
+    print all_lockers
+    min_steps = 999999999999
+    print desired_lockers
+    print given_keys
+    for combination in combinations:
+        steps = len(combination)
+        combination.sort()
+        if not combination:
+            continue
+        for i, locker in enumerate(all_lockers):
+            if locker == 1:
+                step_count = shortest_key_path(combination, i)
+                if i not in combination:
+                    combination.append(i)
+                print combination, i, step_count
+                steps += step_count
+        if steps < min_steps:
+            min_steps = steps
+        print steps
+
+    return min_steps
+
+
 
 def alg2(*args):
     pass
@@ -30,18 +75,17 @@ if __name__ == '__main__':
                 f.write(test_data.read().replace('\r', ''))
 
         test_sets = open('test_data.txt', 'r').read().strip()
-        for test_set in test_sets.split('\n\n\n\n'):
+        for i, test_set in enumerate(test_sets.split('\n\n\n\n')):
+            if i != 3:
+                continue
             lines = map(lambda x: x.strip(), test_set.split('\n'))
             num_lockers, num_keys, num_balls = map(int, lines[1].split(' '))
             given_keys = map(int, lines[2].split(' '))
             desired_lockers = map(int, lines[3].split(' '))
             ans = int(lines[5])
-            print str(num_lockers) + ' ' + str(num_keys) + ' ' + str(num_balls)
-            print given_keys
-            print desired_lockers
-            print ans
-            print
-            print
+            our_ans = alg1(num_lockers, num_keys, num_balls, given_keys, desired_lockers)
+            print 'our ans: ' + str(our_ans)
+            print 'real ans: ' + str(ans)
 
     elif sys.argv[1] == '--time':
         random.seed(935182318)
