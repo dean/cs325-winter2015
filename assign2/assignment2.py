@@ -31,11 +31,11 @@ def alg1(num_keys, num_lockers, num_balls, given_keys, desired_lockers):
     desired_lockers.sort()
     all_lockers = [0 if x not in desired_lockers else 1 for x in range(desired_lockers[-1] + 1)]
     print all_lockers
-    min_steps = 999999999999
+    total_opened = []
     print desired_lockers
     print given_keys
     for combination in combinations:
-        steps = len(combination)
+        num_opened = len(combination)
         combination.sort()
         if not combination:
             continue
@@ -45,17 +45,15 @@ def alg1(num_keys, num_lockers, num_balls, given_keys, desired_lockers):
                 if i not in combination:
                     combination.append(i)
                 print combination, i, step_count
-                steps += step_count
-        if steps < min_steps:
-            min_steps = steps
-        print steps
-
-    return min_steps
-
+                num_opened += step_count
+        total_opened.append(num_opened)
+        print num_opened
+    return min(total_opened)
 
 
 def alg2(*args):
     pass
+
 
 def alg3(*args):
     pass
