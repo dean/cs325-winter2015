@@ -5,6 +5,9 @@ import sys
 import urllib2
 
 
+DEBUG = False
+
+
 def shortest_key_path(keys, locker):
     return min(key - locker if key >= locker else locker - key for key in keys)
 
@@ -17,7 +20,11 @@ def powerset(_set):
 
 
 def alg1(num_lockers, num_keys, num_balls, given_keys, desired_lockers):
-    key_sets = powerset(given_keys)
+    if not DEBUG:
+        key_sets = powerset(given_keys)
+    else:
+        from itertools import combinations
+        key_sets = combinations(given_keys)
     desired_lockers.sort()
     all_lockers = [x in desired_lockers for x in xrange(num_lockers + 1)]
     total_opened = []
@@ -50,21 +57,37 @@ if __name__ == '__main__':
         sys.exit()
 
     elif sys.argv[1] == '--test':
-        if not os.path.exists('test_data.txt'):
-            test_data = urllib2.urlopen('http://www.eecs.orst.edu/~glencora/cs325/dp.txt')
-            with open('test_data.txt', 'w') as f:
-                f.write(test_data.read().replace('\r', ''))
+        arg = None
+        if len(sys.argv) > 2:
+            arg = sys.argv[2]
+            if int(arg) < 1 or int(arg) > 3:
+                print 'Algorithm ' + arg + ' does not exist!'
+                sys.exit(1)
+            if not os.path.exists('test_data' + sys.argv[2] + '.txt'):
+                test_data = urllib2.urlopen('http://www.eecs.orst.edu/~glencora/cs325/dp_set' + arg + '.txt')
+                with open('test_data' + arg + '.txt', 'w') as f:
+                    f.write(test_data.read().replace('\r', ''))
+            test_sets = open('test_data' + arg + '.txt', 'r').read().strip()
+            chunks = map(lambda x: '\n'.join(x.split('\n')[1:]), test_sets.split('\n\n\n'))
+        else:
+            if not os.path.exists('test_data.txt'):
+                test_data = urllib2.urlopen('http://www.eecs.orst.edu/~glencora/cs325/dp.txt')
+                with open('test_data.txt', 'w') as f:
+                    f.write(test_data.read().replace('\r', ''))
+            test_sets = open('test_data.txt', 'r').read().strip()
+            chunks = map(lambda x: '\n'.join(x.split('\n')[1:4] + [x.split('\n')[5]]), test_sets.split('\n\n\n\n'))
 
-        test_sets = open('test_data.txt', 'r').read().strip()
-        for i, test_set in enumerate(test_sets.split('\n\n\n\n')):
+        for i, test_set in enumerate(chunks):
             lines = map(lambda x: x.strip(), test_set.split('\n'))
-            num_lockers, num_keys, num_balls = map(int, lines[1].split(' '))
-            given_keys = map(int, lines[2].split(' '))
-            desired_lockers = map(int, lines[3].split(' '))
-            ans = int(lines[5])
+            num_lockers, num_keys, num_balls = map(int, lines[0].split(' '))
+            given_keys = map(int, lines[1].split(' '))
+            desired_lockers = map(int, lines[2].split(' '))
+            if not arg:
+                ans = int(lines[3])
             our_ans = alg1(num_lockers, num_keys, num_balls, given_keys, desired_lockers)
             print 'our ans: ' + str(our_ans)
-            print 'real ans: ' + str(ans)
+            if not arg:
+                print 'real ans: ' + str(ans)
 
     elif sys.argv[1] == '--time':
         random.seed(935182318)
