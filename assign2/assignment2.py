@@ -8,36 +8,31 @@ import urllib2
 def shortest_key_path(keys, locker):
     return min(key - locker if key >= locker else locker - key for key in keys)
 
-def generate_combinations(combs):
-    if not combs:
+
+def powerset(_set):
+    if not _set:
         return [[]]
-    new_combs = generate_combinations(combs[1:])
-    return (generate_combinations(combs[1:]) +
-            [[combs[0]] + x for x in generate_combinations(combs[1:])])
+    return (powerset(_set[1:]) +
+            [[_set[0]] + x for x in powerset(_set[1:])])
+
 
 def alg1(num_keys, num_lockers, num_balls, given_keys, desired_lockers):
-    combinations = generate_combinations(given_keys)
-    combinations = list(sorted(combinations, key=lambda x: len(x)))
+    key_sets = powerset(given_keys)
     desired_lockers.sort()
-    all_lockers = [0 if x not in desired_lockers else 1 for x in range(desired_lockers[-1] + 1)]
-    print all_lockers
+    all_lockers = [False if x not in desired_lockers else True
+                   for x in xrange(desired_lockers[-1] + 1)]
     total_opened = []
-    print desired_lockers
-    print given_keys
-    for combination in combinations:
-        num_opened = len(combination)
-        combination.sort()
-        if not combination:
+    for keys in key_sets:
+        num_opened = len(keys)
+        if not keys:
             continue
-        for i, locker in enumerate(all_lockers):
-            if locker == 1:
-                step_count = shortest_key_path(combination, i)
-                if i not in combination:
-                    combination.append(i)
-                print combination, i, step_count
+        for locker, has_ball in enumerate(all_lockers):
+            if has_ball:
+                step_count = shortest_key_path(keys, locker)
+                if locker not in keys:
+                    keys.append(locker)
                 num_opened += step_count
         total_opened.append(num_opened)
-        print num_opened
     return min(total_opened)
 
 
