@@ -6,17 +6,7 @@ import urllib2
 
 
 def shortest_key_path(keys, locker):
-    shortest = 99999999999
-    for key in keys:
-        if key == locker:
-            return 0
-        if key > locker:
-            if key - locker < shortest:
-                shortest = key - locker
-        else:
-            if locker - key < shortest:
-                shortest = locker - key
-    return shortest
+    return min(key - locker if key >= locker else locker - key for key in keys)
 
 def generate_combinations(combs):
     if not combs:
