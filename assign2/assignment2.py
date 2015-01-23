@@ -16,27 +16,25 @@ def powerset(_set):
             [[_set[0]] + x for x in powerset(_set[1:])])
 
 
-def alg1(num_keys, num_lockers, num_balls, given_keys, desired_lockers):
+def alg1(num_lockers, num_keys, num_balls, given_keys, desired_lockers):
     key_sets = powerset(given_keys)
     desired_lockers.sort()
-    all_lockers = [False if x not in desired_lockers else True
-                   for x in xrange(desired_lockers[-1] + 1)]
+    all_lockers = [x in desired_lockers for x in xrange(num_lockers + 1)]
     total_opened = []
     for keys in key_sets:
-        num_opened = len(keys)
+        num_opened = len(keys)  # Use every key
         if not keys:
             continue
         for locker, has_ball in enumerate(all_lockers):
             if has_ball:
-                step_count = shortest_key_path(keys, locker)
+                num_opened += shortest_key_path(keys, locker)
                 if locker not in keys:
                     keys.append(locker)
-                num_opened += step_count
         total_opened.append(num_opened)
     return min(total_opened)
 
 
-def alg2(*args):
+def alg2(num_keys, num_lockers, num_balls, given_keys, desired_lockers):
     pass
 
 
@@ -59,8 +57,6 @@ if __name__ == '__main__':
 
         test_sets = open('test_data.txt', 'r').read().strip()
         for i, test_set in enumerate(test_sets.split('\n\n\n\n')):
-            if i != 3:
-                continue
             lines = map(lambda x: x.strip(), test_set.split('\n'))
             num_lockers, num_keys, num_balls = map(int, lines[1].split(' '))
             given_keys = map(int, lines[2].split(' '))
