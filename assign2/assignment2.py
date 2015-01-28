@@ -9,7 +9,14 @@ DEBUG = False
 
 
 def shortest_key_path(keys, locker):
-    return min(key - locker if key >= locker else locker - key for key in keys)
+    shortest = 99999999999999
+    indices = None
+    for key in keys:
+        short = abs(key - locker)
+        if short < shortest:
+            shortest = short
+            indices = (locker, key + 1) if key >= locker else (key, locker + 1)
+    return shortest, indices
 
 
 def powerset(_set):
@@ -34,9 +41,9 @@ def alg1(num_lockers, num_keys, num_balls, given_keys, desired_lockers):
             continue
         for locker, has_ball in enumerate(all_lockers):
             if has_ball:
-                num_opened += shortest_key_path(keys, locker)
-                if locker not in keys:
-                    keys.append(locker)
+                opened, indices = shortest_key_path(keys, locker)
+                num_opened += opened
+                keys.extend(xrange(indices[0], indices[1]))
         total_opened.append(num_opened)
     return min(total_opened)
 
