@@ -8,15 +8,49 @@ import urllib2
 DEBUG = False
 
 
-def shortest_key_path(keys, locker):
-    shortest = 99999999999999
+
+def count_paths(keys, all_balls, given_balls):
+    path = 0
+    path = len(keys) + left_path(keys[0], all_balls) + right_path(keys[-1], all_balls)
+    if len(keys) == 1:
+        return path
+
+    for x in xrange(len(keys) - 1):
+        path += total_midpath(keys[x], keys[x+1], all_balls)
+
+    return path
+
+def total_midpath(left_key, right_key, all_balls):
+    left_ind = left_key
+    biggest_gap = 0
     indices = None
-    for key in keys:
-        short = abs(key - locker)
-        if short < shortest:
-            shortest = short
-            indices = (locker, key + 1) if key >= locker else (key, locker + 1)
-    return shortest, indices
+    for x in xrange(left_key, right_key + 1):
+        if all_balls[x]:
+            gap = x - left_ind
+            if gap > biggest_gap:
+                biggest_gap = gap
+                indices = (left_ind, x)
+            left_ind = x
+
+    # Didn't find a ball!
+    if not indices:
+        return 0
+
+    return right_key - left_key - biggest_gap
+
+def left_path(start, all_balls):
+    leftmost = start
+    for x in xrange(start - 1, -1, -1):
+        if all_balls[x]:
+            leftmost = x
+    return start - leftmost
+
+def right_path(start, all_balls):
+    rightmost = start
+    for x in xrange(start + 1, len(all_balls)):
+        if all_balls[x]:
+            rightmost = x
+    return rightmost - start
 
 
 def powerset(_set):
@@ -36,15 +70,11 @@ def alg1(num_lockers, num_keys, num_balls, given_keys, desired_lockers):
     all_lockers = [x in desired_lockers for x in xrange(num_lockers + 1)]
     total_opened = []
     for keys in key_sets:
-        num_opened = len(keys)  # Use every key
+        keys.sort()
         if not keys:
             continue
-        for locker, has_ball in enumerate(all_lockers):
-            if has_ball:
-                opened, indices = shortest_key_path(keys, locker)
-                num_opened += opened
-                keys.extend(xrange(indices[0], indices[1]))
-        total_opened.append(num_opened)
+        p = count_paths(keys, all_lockers, desired_lockers)
+        total_opened.append(p)
     return min(total_opened)
 
 
@@ -75,7 +105,7 @@ if __name__ == '__main__':
                 with open('test_data' + arg + '.txt', 'w') as f:
                     f.write(test_data.read().replace('\r', ''))
             test_sets = open('test_data' + arg + '.txt', 'r').read().strip()
-            chunks = map(lambda x: '\n'.join(x.split('\n')[1:]), test_sets.split('\n\n\n'))
+            chunks = map(lambda x: '\n'.join(x.split('\n')[1:]), test_sets.split('\n\n'))
         else:
             if not os.path.exists('test_data.txt'):
                 test_data = urllib2.urlopen('http://www.eecs.orst.edu/~glencora/cs325/dp.txt')
@@ -84,6 +114,7 @@ if __name__ == '__main__':
             test_sets = open('test_data.txt', 'r').read().strip()
             chunks = map(lambda x: '\n'.join(x.split('\n')[1:4] + [x.split('\n')[5]]), test_sets.split('\n\n\n\n'))
 
+        print len(chunks)
         for i, test_set in enumerate(chunks):
             lines = map(lambda x: x.strip(), test_set.split('\n'))
             num_lockers, num_keys, num_balls = map(int, lines[0].split(' '))
