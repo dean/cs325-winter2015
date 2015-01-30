@@ -17,8 +17,39 @@ def count_paths(keys, all_balls, given_balls):
 
     for x in xrange(len(keys) - 1):
         path += total_midpath(keys[x], keys[x+1], all_balls)
+        # path += total_midpath2(keys, all_balls)
 
     return path
+
+
+# def total_midpath2(keys, all_balls):
+#     key_ind = 0
+#     left_ind = keys[0]
+#     biggest_gap = 0
+#     total_count = 0
+#     found = False
+#     for x in range(keys[0], keys[-1] + 1):
+#          if x == keys[key_ind + 1]:
+#             if found:
+#                 total_count += keys[key_ind + 1] - keys[key_ind] - biggest_gap
+#             biggest_gap = 0
+#             found = False
+#             key_ind += 1
+#             left_ind = keys[key_ind]
+#          if all_balls[x]:
+#             if x == keys[key_ind]:
+#                 continue
+#             if not found:
+#                 gap = x - keys[key_ind]
+#             else:
+#                 gap = x - left_ind
+#             if gap > biggest_gap:
+#                 biggest_gap = gap
+#             found = True
+#             left_ind = x
+#     return total_count
+
+
 
 def total_midpath(left_key, right_key, all_balls):
     left_ind = left_key
@@ -73,6 +104,7 @@ def alg1(num_lockers, num_keys, num_balls, given_keys, desired_lockers):
         keys.sort()
         if not keys:
             continue
+        all_keys = [x in keys for x in xrange(num_lockers + 1)]
         p = count_paths(keys, all_lockers, desired_lockers)
         total_opened.append(p)
     return min(total_opened)
