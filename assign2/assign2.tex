@@ -1,0 +1,114 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+
+
+\newtheorem{algorithm}{Algorithm}
+\setlength\parindent{0pt}
+
+\title{Group Assignment 2}
+\author{Chance Zibolski, Dean Johnson}
+
+\begin{document}
+\maketitle
+
+\section*{Algorithm 1}
+
+\section*{Psuedocode}
+
+\begin{verbatim}
+Powerset(set):
+  if set == {}:
+      return {{}}
+  else
+    result = Powerset(set[1:])
+    new_elements = []
+    for x in Powerset(set[1:])
+      new_elements += [set[0] + x]
+    return result + new_elements
+\end{verbatim}
+
+\begin{verbatim}
+Algorithm1(N, M, T, key_lockers, ball_lockers)
+    // Every combination of keys
+    key_sets = Powerset(key_lockers)
+    // Create a list containing 0 if the locker has no ball, 1 if it does
+    for i = 0, ..., T
+        ball_index = ball_lockers[i]
+        lockers[ball_index] = 1
+
+    counts = []
+    for key_set in key_sets:
+        lockers = initialize list of size N to all 0's
+
+        count = 0
+
+        // The left most and right most lockers with keys are their own cases
+        // We iterate from the edge locker with a key, keeping track of the farthest
+        // ball we find in that direction. It's distance from the edge key locker
+        // is the number of lockers we need to open for the edges.
+        // We do this for both edges
+
+        left_most_key = key_sets[0]
+        right_most_key = key_sets[len(key_set)]
+
+        // Setting last_ball_seen to the left_most_key means if we found no balls
+        // then when we subtract, we get 0 lockers opened
+        last_ball_seen = left_most_key
+        for i = left_most_key down to 0
+            if lockers[i] == 1:
+                last_ball_seen = i
+        count += left_most_key - last_ball_seen
+
+        last_ball_seen = right_most_key
+        for i = right_most_key, ..., N
+              if lockers[i] == 1:
+                  last_ball_seen = i
+        count += last_ball_seen - right_most_key
+
+        // Now we need to calculate the largest gap between two lockers with keys, or
+        // the midpoint.  The number of lockers needed to be opened between those two
+        // locker is the distance between the lockers minus the largest gap between a
+        // ball and a locker or a ball and one of the keys.
+
+        // We're using all the key's we're given
+        count += len(key_set)
+
+        // For the given combination of keys, compute how best to use it
+        for i = 0; ..., len(key_set) - 1
+            // This loops through pairs of keys
+            left_key = key_set[i]
+            right_key = key_set[i+1]
+
+            biggest_gap = 0
+            found = false
+            left_index = left_key
+
+            // Give a pair of keys, compute the biggest gap
+            for j = left_key, ..., right_key + 1
+                if lockers[j] == 1
+                    gap = j - left_index
+                    if gap > biggest_gap
+                        biggest_gap = gap
+                        found = true
+                    left_index = j
+
+            if found == true
+                count += (right_key - left_key - biggest_gap)
+        append count to counts
+    return min(counts)
+\end{verbatim}
+
+\section*{Run-time analysis}
+We create the powerset of keys, or every combination of keys, which takes
+$\mathcal{O}(2^n)$ time.
+
+We then, for every combination we determine the minimum number of lockers
+that need to be opened to obtain all tennis balls. There are two loops, but
+it takes $\mathcal{O}(n)$ time. Here's the explanation:
+
+Given a set of keys, we're looping through the keys m times, where m is the
+number of keys in the subset, and m <= n. For each
+\end{document}
