@@ -1,0 +1,74 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+
+
+\newtheorem{algorithm}{Algorithm}
+\setlength\parindent{0pt}
+
+\title{Group Assignment 3}
+\author{Chance Zibolski, Dean Johnson}
+
+\begin{document}
+\maketitle
+
+\begin{verbatim}
+Method1(a[0,...,n-1], b[0,...,m-1])
+    best_a = n-1
+    best_b = 0
+    for i = 0; i < n; i++
+        for j = 0; j < m; j++
+            best = abs(a[best_a] + b[best_b])
+            curr = abs(a[i] + b[j])
+            if curr < curr_best
+                best_a = i
+                best_b = j
+    return (best_a, best_b)
+\end{verbatim}
+
+\begin{verbatim}
+Method2(a[0,...,n-1], b[0,...,m-1])
+    best_a = n-1
+    best_b = 0
+    for i = 0; i < n; i++
+        last = infinity
+        for j = 0; j < m; j++
+            curr = abs(a[i] + b[j])
+            if curr > last
+                break
+            last = curr
+            best = abs(a[best_a] + b[best_b])
+            if  curr < best
+                best_a = i
+                best_b = j
+    return (best_a, best_b)
+\end{verbatim}
+
+\begin{verbatim}
+Method3(a[0,...,n-1], b[0,...,m-1])
+    new_list = a
+    append negation of list b to new_list
+    new_list = sort(new_list)
+
+    best_a = -1
+    best_b = -1
+    for i = 0; i < n+m-2; i++
+        curr, next = new_list[i], new_list[i+1]
+
+        if curr and next are both in same original list
+            continue
+
+        diff = abs(curr - next)
+
+        if (best_a != -1 and best_b != -1) and diff < abs(best_a - best_b)
+            best_a = curr
+            best_b = next
+
+    return original indices of best_a and best_b
+
+\end{verbatim}
+
+
+\end{document}
