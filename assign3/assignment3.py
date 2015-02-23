@@ -1,18 +1,15 @@
-def div_and_conquer(L, R):
+def closest_to_zero(O):
+    if len(L) == 0:
+        return None
+    half = len(O)/2
+    L, R = O[:half], O[half:]
+    ans = min(closest_to_zero(L),
+              closest_to_zero(R),
+              method3_suffix_prefix(L, R),
+              key=lambda x: x[1])
+
     return min(map(abs, div_and_conquer(L, R)))
 
-def method1_suffix_prefix(L, R):
-    l_best, r_best = len(L) - 1, 0
-    for i in xrange(len(L) - 1, -1, -1):
-        for j in xrange(len(R)):
-            if abs(L[i] + R[j]) < abs(L[l_best] + R[r_best]):
-                l_best, r_best = i, j
-
-    return L[l_best] + R[r_best]
-
-def method2_suffix_prefix(L, R):
-    L.sort()
-    R.sort()
 
 def method3_suffix_prefix(L, R):
     new_l = [(e, True, i) for i, e in enumerate(L)]
