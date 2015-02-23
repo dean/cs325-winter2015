@@ -78,8 +78,66 @@ def alg1(num_lockers, num_keys, num_balls, given_keys, desired_lockers):
     return min(total_opened)
 
 
-def alg2(num_keys, num_lockers, num_balls, given_keys, desired_lockers):
-    pass
+def alg2(num_lockers, num_keys, num_balls, given_keys, desired_lockers):
+    all_lockers = [x in desired_lockers for x in xrange(num_lockers + 1)]
+
+    # def _powerset(initial, _set):
+    #     if not initial:
+    #         if not _set:
+    #             return 999999999999
+    #         return count_paths(_set, all_lockers, desired_lockers)
+    #     return min(_powerset(initial[1:], _set),
+    #                _powerset(initial[1:], _set + [initial[0]]),
+    #                (_powerset(initial[1:], _set + [x]) for x in initial[1:]))
+
+    # given_keys.sort()
+    # return _powerset(given_keys, [])
+    # count = 0
+    # if num_keys == 1:
+    #     return (1 + left_path(given_keys[0], all_lockers) +
+    #              right_path(given_keys[-1], all_lockers))
+    # if left_keys != 0:
+    #     left_keys += 1
+    # else:
+    #     given_keys.pop(0)
+
+    # if left_keys != 0:
+    #     left_keys += 1
+    # else:
+    #     given_keys.pop(-1)
+
+
+    MAX = 99999999999
+    path = MAX
+    # Because j > i
+    # f = [['' for x in range(num_keys)] for y in xrange(num_keys)]
+    given_keys.sort()
+    desired_lockers.sort()
+
+    # for i in xrange(1, num_keys):
+    #     for j in xrange(i):
+    #         left_key = left_path(given_keys[0], all_lockers)
+    #         right_key = right_path(given_keys[0], all_lockers)
+    #         for j in range(i):
+    #             d[i][j] = (left_path(given_keys[j], all_lockers) +
+    #                    right_path(given_keys[i], all_lockers) +
+    #                    (given_keys[i] - given_keys[j]) -
+    #                    total_midpath(given_keys[j], given_keys[i], all_lockers)
+    #             )
+
+
+def d(i, keys, all_lockers, first=True):
+    if i == 0:
+        print keys[i]
+        return left_path(keys[i], all_lockers) + 1
+    if i == len(keys) - 1:
+        return right_path(keys[i], all_lockers)
+    return total_midpath(keys[i -1], keys[i], all_lockers) + d(i - 1, keys, all_lockers) + 1
+
+
+
+
+
 
 
 def alg3(*args):
@@ -114,8 +172,9 @@ if __name__ == '__main__':
             test_sets = open('test_data.txt', 'r').read().strip()
             chunks = map(lambda x: '\n'.join(x.split('\n')[1:4] + [x.split('\n')[5]]), test_sets.split('\n\n\n\n'))
 
-        print len(chunks)
         for i, test_set in enumerate(chunks):
+            if i != 4:
+                continue
             lines = map(lambda x: x.strip(), test_set.split('\n'))
             num_lockers, num_keys, num_balls = map(int, lines[0].split(' '))
             given_keys = map(int, lines[1].split(' '))

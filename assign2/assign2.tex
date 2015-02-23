@@ -103,14 +103,20 @@ Algorithm1(N, M, T, key_lockers, ball_lockers)
 
 \section*{Run-time analysis}
 We create the powerset of keys, or every combination of keys, which takes
-$\mathcal{O}(2^n)$ time.
+$\mathcal{O}(2^M)$ time.
 
-We then, for every combination we determine the minimum number of lockers
+We then, for every combination, determine the minimum number of lockers
 that need to be opened to obtain all tennis balls. There are two loops, but
-it takes $\mathcal{O}(n)$ time. Here's the explanation:
+it takes $\mathcal{O}(N)$ time. Here's the explanation: \\ 
 
-Given a set of keys, we're looping through the keys m times, where m is the
-number of keys in the subset, and m <= n. 
+K = length of subset of keys. \\
+
+Because we know that each key must be within the lockers given M, we know
+that the key's values are <= M. Because we only iterate between K[i] and 
+K[i + 1], and K is sorted, and we iterate K times, we can represent this with
+the equation K * (M / K). We iterate K times, but only for on average M/K times. \\
+
+This results in $\mathcal{O}(N*2^M)$ 
 
 \section*{Solutions}
 \begin{enumerate}
