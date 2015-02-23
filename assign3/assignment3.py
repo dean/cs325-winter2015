@@ -1,6 +1,3 @@
-
-
-
 def div_and_conquer(L, R):
     return min(map(abs, div_and_conquer(L, R)))
 
@@ -30,8 +27,8 @@ def method3_suffix_prefix(L, R):
             continue
 
         gap_width = abs(cur[0] - _next[0])
-        if (not smallest_gap or
-                (gap_width < abs(smallest_gap[0][0] - smallest_gap[1][0]))):
+        smaller_gap = gap_width < abs(smallest_gap[0][0] - smallest_gap[1][0])
+        if not smallest_gap or smaller_gap:
              smallest_gap = (cur, _next)
 
     return smallest_gap
