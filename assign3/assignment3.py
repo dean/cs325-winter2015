@@ -36,20 +36,6 @@ def method3_suffix_prefix(L, R):
 
     return smallest_gap
 
-# def method3(l, r):
-#     new_l = [(e, True, i) for i, e in enumerate(L)]
-#     inversed = [(e * -1, False, i) for i, e in enumerate(R)]
-#     new_l += inversed
-#     new_l = sorted(new_l, key=lambda x: x[0])
-# 
-#     for i, item in enumerate(new_l):
-#         if i < len(new_l):
-#             current, _next = item, new_l[i+1]
-#             if current[1] == _next[1]:
-#                 continue
-#             diff = abs(current[0] - _next[0]
-
-
 
 L = [22, -9, 32, -27, -53]
 R = [58, 52, 149, 56, 33]
