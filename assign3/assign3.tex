@@ -71,7 +71,7 @@ Method3(a[0,...,n-1], b[0,...,m-1])
 
 
 \begin{verbatim}
-ctz(a[0,...,n-1])
+ctz(a[0,...,n-1], method_num)
     if n = o
         return -1
 
@@ -83,8 +83,9 @@ ctz(a[0,...,n-1])
 
     a = sum_of_suffices(left)
     b = sum_of_prefices(right)
-    method = methods[number]
-    sum_both = method(a, b)
+
+    suffix_prefix = methods[method_num]
+    sum_both = suff_prefix(a, b)
 
     val = min{
         sum_left,
