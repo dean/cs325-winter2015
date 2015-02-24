@@ -1,14 +1,21 @@
+import os
+import random
+import time
+import sys
+import urllib2
+
+
 def closest_to_zero(O, method):
-    if len(L) == 0:
-        return None
+    if len(O) < 2:
+        return (abs(O[0]), 0, 0)
     half = len(O)/2
     L, R = O[:half], O[half:]
     suffices = sum_of_suffices(L)
     prefices = sum_of_prefices(R)
-    ans = min(filter(lambda x: x, closest_to_zero(suffices)),
-              filter(lambda x: x, closest_to_zero(prefices)),
-              method(L, R),
-              key=lambda x: x[1])
+    left = closest_to_zero(L, method)
+    right = closest_to_zero(R, method)
+    both = method(suffices, prefices)
+    ans = min(left, right, both, key=lambda x: x[0])
 
     return ans
 
@@ -37,22 +44,59 @@ def method3_suffix_prefix(L, R):
             continue
 
         gap_width = abs(cur[0] - _next[0])
-        smaller_gap = gap_width < abs(smallest_gap[0][0] - smallest_gap[1][0])
-        if not smallest_gap or smaller_gap:
-             smallest_gap = (cur, _next)
+        if (not smallest_gap or
+                gap_width < abs(smallest_gap[0][0] - smallest_gap[1][0])):
+            smallest_gap = (cur, _next, gap_width)
 
-    return smallest_gap
+    if smallest_gap[1][1]:
+        smallest_gap = (smallest_gap[1], smallest_gap[0], smallest_gap[2])
+
+    return (smallest_gap[2], smallest_gap[0][2], smallest_gap[1][2] + len(L))
 
 
-L = [22, -9, 32, -27, -53]
-R = [58, 52, 149, 56, 33]
-
-
-L = [31, -41, 59, 26, -53]
-print sum_of_suffices(L)
-R = [58, -6, 97, -93, -23]
-print sum_of_prefices(R)
-
+# Correct iput for closest to zero
+# L = [31, -41, 59, 26, -53]
+# R = [58, -6, 97, -93, -23]
+# O = L + R
+# i, j, s = closest_to_zero(O, method3_suffix_prefix)
+# 
+# assert abs(sum(O[i:j + 1])) == s
+# 
+# 
+# L = [22, -9, 32, -27, -53]
+# R = [58, 52, 149, 56, 33]
 # O = L+R
 # print closest_to_zero(O, method3_suffix_prefix)
 # print method3_suffix_prefix(L, R)
+
+
+
+
+if __name__ == '__main__':
+    if not len(sys.argv) > 1:
+        print 'Usage: python assignment1.py [option]'
+        print 'Options:'
+        options = ['--test', '--time <# runs>']
+        print '\n'.join(map(lambda x:'\t'+ x, options))
+        sys.exit()
+
+    elif sys.argv[1] == '--test':
+        arg = None
+        test_set_url = 'http://web.engr.oregonstate.edu/~glencora/cs325/ctz/test_cases_with_solutions.txt'
+        chunks = urllib2.urlopen(test_set_url).read().strip().replace('\r', '').split('\n')
+
+        for i, test_set in enumerate(chunks):
+            inp, s, ind1, ind2 = eval(test_set)
+
+            print (s, ind1, ind2)
+            print closest_to_zero(inp, method3_suffix_prefix)
+
+
+
+
+
+
+
+
+
+
