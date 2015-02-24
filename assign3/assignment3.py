@@ -81,12 +81,28 @@ if __name__ == '__main__':
         sys.exit()
 
     elif sys.argv[1] == '--test':
-        arg = None
         test_set_url = 'http://web.engr.oregonstate.edu/~glencora/cs325/ctz/test_cases_with_solutions.txt'
         chunks = urllib2.urlopen(test_set_url).read().strip().replace('\r', '').split('\n')
 
-        for i, test_set in enumerate(chunks):
+        for test_set in chunks:
             inp, s, ind1, ind2 = eval(test_set)
 
-            print (s, ind1, ind2)
-            print closest_to_zero(zip(inp, xrange(len(inp))), method3_suffix_prefix)
+            correct = (s, ind1, ind2)
+            ans = closest_to_zero(zip(inp, xrange(len(inp))), method3_suffix_prefix)
+
+            print correct
+            print ans
+
+            assert(correct == ans)
+
+
+    elif sys.argv[1] == '--solve':
+        test_set_url = 'https://eecs.orst.edu/~glencora/cs325/ctz/test_cases_without_solutions.txt'
+        chunks = urllib2.urlopen(test_set_url).read().strip().replace('\r', '').split('\n')
+        for test_set in chunks:
+            inp = eval(test_set)
+            s, ind1, ind2 = closest_to_zero(zip(inp, xrange(len(inp))), method3_suffix_prefix)
+            print s, ind1, ind2
+
+
+
