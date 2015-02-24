@@ -22,18 +22,17 @@ def closest_to_zero(O, method):
 def sum_of_suffices(L):
     cur = [L[-1]]
     for x in L[:-1][::-1]:
-        cur.append(cur[-1] + x)
+        cur.append((cur[-1][0] + x[0], x[1]))
     return cur[::-1]
 
 def sum_of_prefices(R):
     cur = [R[0]]
     for x in R[1:]:
-        cur.append(cur[-1] + x)
+        cur.append((cur[-1][0] + x[0], x[1]))
     return cur
 
 def method3_suffix_prefix(L, R):
     new_l = [(e[0], True, e[1]) for e in L]
-    print new_l
     inversed = [(e[0] * -1, False, e[1]) for e in R]
     new_l += inversed
     new_l = sorted(new_l, key=lambda x: x[0])
@@ -89,15 +88,5 @@ if __name__ == '__main__':
         for i, test_set in enumerate(chunks):
             inp, s, ind1, ind2 = eval(test_set)
 
-            #print (s, ind1, ind2)
-            closest_to_zero(zip(inp, xrange(len(inp))), method3_suffix_prefix)
-
-
-
-
-
-
-
-
-
-
+            print (s, ind1, ind2)
+            print closest_to_zero(zip(inp, xrange(len(inp))), method3_suffix_prefix)
