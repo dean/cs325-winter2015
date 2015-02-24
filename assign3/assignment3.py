@@ -7,7 +7,7 @@ import urllib2
 
 def closest_to_zero(O, method):
     if len(O) < 2:
-        return (abs(O[0]), 0, 0)
+        return (abs(O[0][0]), O[0][1], O[0][1])
     half = len(O)/2
     L, R = O[:half], O[half:]
     suffices = sum_of_suffices(L)
@@ -32,8 +32,9 @@ def sum_of_prefices(R):
     return cur
 
 def method3_suffix_prefix(L, R):
-    new_l = [(e, True, i) for i, e in enumerate(L)]
-    inversed = [(e * -1, False, i) for i, e in enumerate(R)]
+    new_l = [(e[0], True, e[1]) for e in L]
+    print new_l
+    inversed = [(e[0] * -1, False, e[1]) for e in R]
     new_l += inversed
     new_l = sorted(new_l, key=lambda x: x[0])
 
@@ -51,7 +52,7 @@ def method3_suffix_prefix(L, R):
     if smallest_gap[1][1]:
         smallest_gap = (smallest_gap[1], smallest_gap[0], smallest_gap[2])
 
-    return (smallest_gap[2], smallest_gap[0][2], smallest_gap[1][2] + len(L))
+    return (smallest_gap[2], smallest_gap[0][2], smallest_gap[1][2])
 
 
 # Correct iput for closest to zero
@@ -88,8 +89,8 @@ if __name__ == '__main__':
         for i, test_set in enumerate(chunks):
             inp, s, ind1, ind2 = eval(test_set)
 
-            print (s, ind1, ind2)
-            print closest_to_zero(inp, method3_suffix_prefix)
+            #print (s, ind1, ind2)
+            closest_to_zero(zip(inp, xrange(len(inp))), method3_suffix_prefix)
 
 
 
