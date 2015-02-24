@@ -71,6 +71,16 @@ Method3(a[0,...,n-1], b[0,...,m-1])
 
 
 \begin{verbatim}
+sum_of_suffices(a[0,...,n-1])
+    for i = n-2; i > 0; i--
+        a[i] = a[i] + a[i+1]
+    return a
+
+sum_of_prefices(a[0,...,n-1])
+    for i = 1; i < n; i++
+        a[i] = a[i] + a[i-1]
+    return a
+
 ctz(a[0,...,n-1], method_num)
     if n = o
         return -1
@@ -81,11 +91,11 @@ ctz(a[0,...,n-1], method_num)
     sum_left = ctz(left)
     sum_right = ctz(right)
 
-    a = sum_of_suffices(left)
-    b = sum_of_prefices(right)
+    suffices = sum_of_suffices(left)
+    prefices = sum_of_prefices(right)
 
     suffix_prefix = methods[method_num]
-    sum_both = suff_prefix(a, b)
+    sum_both = suff_prefix(suffices, prefices)
 
     val = min{
         sum_left,
