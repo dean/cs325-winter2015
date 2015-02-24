@@ -67,6 +67,32 @@ Method3(a[0,...,n-1], b[0,...,m-1])
             best_b = next
 
     return original indices of best_a and best_b
+\end{verbatim}
+
+
+\begin{verbatim}
+ctz(a[0,...,n-1])
+    if n = o
+        return -1
+
+    left = a[0,..,n/2]
+    right = a[(n/2)+1,..,n-1]
+
+    sum_left = ctz(left)
+    sum_right = ctz(right)
+
+    a = sum_of_suffices(left)
+    b = sum_of_prefices(right)
+    method = methods[number]
+    sum_both = method(a, b)
+
+    val = min{
+        sum_left,
+        sum_right,
+        sum_both
+    }
+
+    return val, indices (i, j) of val
 
 \end{verbatim}
 
