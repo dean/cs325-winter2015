@@ -54,24 +54,6 @@ def method3_suffix_prefix(L, R):
     return (smallest_gap[2], smallest_gap[0][2], smallest_gap[1][2])
 
 
-# Correct iput for closest to zero
-# L = [31, -41, 59, 26, -53]
-# R = [58, -6, 97, -93, -23]
-# O = L + R
-# i, j, s = closest_to_zero(O, method3_suffix_prefix)
-# 
-# assert abs(sum(O[i:j + 1])) == s
-# 
-# 
-# L = [22, -9, 32, -27, -53]
-# R = [58, 52, 149, 56, 33]
-# O = L+R
-# print closest_to_zero(O, method3_suffix_prefix)
-# print method3_suffix_prefix(L, R)
-
-
-
-
 if __name__ == '__main__':
     if not len(sys.argv) > 1:
         print 'Usage: python assignment1.py [option]'
@@ -95,14 +77,22 @@ if __name__ == '__main__':
 
             assert(correct == ans)
 
-
     elif sys.argv[1] == '--solve':
         test_set_url = 'https://eecs.orst.edu/~glencora/cs325/ctz/test_cases_without_solutions.txt'
         chunks = urllib2.urlopen(test_set_url).read().strip().replace('\r', '').split('\n')
+        to_write = ['Size      Ans\n']
         for test_set in chunks:
             inp = eval(test_set)
-            s, ind1, ind2 = closest_to_zero(zip(inp, xrange(len(inp))), method3_suffix_prefix)
-            print s, ind1, ind2
+            timings = []
+            for i in xrange(20):
+                start = time.clock()
+                s, ind1, ind2 = closest_to_zero(zip(inp, xrange(len(inp))), method3_suffix_prefix)
+                timings.append(round(time.clock() - start, 11))
+            print s, ind1, ind2  # Abuse of python scoping
 
+            avg = sum(timings) / len(timings)
+            to_write.append('{0} {1}\n'.format(len(inp), avg))
 
-
+        with open('timings.txt', 'w') as f:
+            for line in to_write:
+                f.write(line)
