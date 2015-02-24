@@ -82,8 +82,8 @@ sum_of_prefices(a[0,...,n-1])
     return a
 
 ctz(a[0,...,n-1], method_num)
-    if n = o
-        return -1
+    if n < 2
+        return a[0]
 
     left = a[0,..,n/2]
     right = a[(n/2)+1,..,n-1]
