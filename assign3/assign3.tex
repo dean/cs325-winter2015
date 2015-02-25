@@ -84,7 +84,7 @@ sum_of_prefices(a[0,...,n-1])
         a[i] = a[i] + a[i-1]
     return a
 
-ctz(a[0,...,n-1], method_num)
+ctz(a[0,...,n-1], suffix_prefix_method)
     if n < 2
         return a[0]
 
@@ -97,8 +97,8 @@ ctz(a[0,...,n-1], method_num)
     suffices = sum_of_suffices(left)
     prefices = sum_of_prefices(right)
 
-    suffix_prefix = methods[method_num]
-    sum_both = suff_prefix(suffices, prefices)
+    // suffix_prefix_method is the subroutine chosen
+    sum_both = suffix_prefix_method(suffices, prefices)
 
     val = min{
         sum_left,
@@ -126,8 +126,15 @@ The nested loop ($n^2$) dominates the running time of the sort ($n \log(n)$) so
 we used $n^2$ for the running time of the non-recursive piece of this method.
 
 \subsection*{Method3}
-$T(n) = 2T(\frac{n}{2}) + \Theta(n \log(n))$
+$T(n) = 2T(\frac{n}{2}) + \Theta(n \log(n))$\\
+
+The running time of our sort is $n \log(n))$\\
 
 Solution: $\Theta(n \log n \log n)$
+
+\section{Plot of experimental running times}
+
+\includegraphics[width=\textwidth]{timings}
+
 
 \end{document}
