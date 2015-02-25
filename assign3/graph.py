@@ -11,18 +11,10 @@ import matplotlib.pyplot as plt
 def make_graph(vals):
     xs = vals[0]
     alg = vals[1]
-    f, subplots = plt.subplots(2, 1, sharex='row')
-    f.set_tight_layout(True)
-    f.subplots_adjust(hspace=2.25)
+    plt.plot(xs, alg, color='green')
     plt.suptitle('Closest to Zero')
-    subplots[0].set_title('Linear Axes')
-    subplots[0].plot(xs, alg, color='green')
-    subplots[0].set_xlabel('Input Size')
-    subplots[0].set_ylabel('Average Runtime (10 Runs)')
-    subplots[1].set_title('Logarithmic Axes')
-    subplots[1].plot(xs, alg, color='green')
-    subplots[1].set_ylabel('Average Runtime (10 Runs)')
-    subplots[1].set_xlabel('Input Size')
+    plt.xlabel('Input Size (Size of Array)')
+    plt.ylabel('Average Runtime (100 Runs) in milliseconds')
 
     plt.savefig('timings.ps')
 
@@ -32,7 +24,7 @@ if __name__ == '__main__':
 
     f = filter(lambda x: x, open('timings.txt', 'r').read().split('\n')[1:])
     f = map(lambda x: filter(lambda y: y, x.split(' ')), f)
-    vals = map(lambda x: (x[0], float(x[1])), f)
+    vals = map(lambda x: (x[0], float(x[1]) * 1000), f)  # Pull out float and convert to milliseconds
     new_vals = [[], []]
 
     if sys.argv[1] == '--graph':

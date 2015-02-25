@@ -84,7 +84,7 @@ if __name__ == '__main__':
         for test_set in chunks:
             inp = eval(test_set)
             timings = []
-            for i in xrange(20):
+            for i in xrange(100):
                 start = time.clock()
                 s, ind1, ind2 = closest_to_zero(zip(inp, xrange(len(inp))), method3_suffix_prefix)
                 timings.append(round(time.clock() - start, 11))
