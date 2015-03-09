@@ -11,17 +11,21 @@ x2 = LpVariable("x2", 0)
 x3 = LpVariable("x3", 0)
 x4 = LpVariable("x4", 0)
 x5 = LpVariable("x5", 0)
-t = LpVariable("t")
-prob += t
+z = LpVariable("z")
+prob += z
+prob += z >= 0
 
 def T(day):
     global prob, x0, x1, x2, x3, x4, x5
-    return (x0 +
-            x1*day +
-            x2*math.cos((2*math.pi*day)/365.25) +
-            x3*math.sin((2*math.pi*day)/365.25) +
-            x4*math.cos((2*math.pi*day)/(365.25 * 10.7)) +
-            x5*math.sin((2*math.pi*day)/(365.25 * 10.7)))
+    return (
+        (x5*math.sin((2*math.pi*day)/(365.25 * 10.7))) +
+        (x4*math.cos((2*math.pi*day)/(365.25 * 10.7))) +
+        (x3*math.sin((2*math.pi*day)/365.25)) +
+        (x2*math.cos((2*math.pi*day)/365.25)) +
+        (x1*day) +
+        x0
+    )
+
 
 def main():
     global prob, x0, x1, x2, x3, x4, x5
@@ -30,23 +34,23 @@ def main():
         headers = reader.next()
         rows = list(reader)
 
-        for row in reader:
-            avg, day = int(row[-2]), int(row[-1])
-            prob += avg - T(day) <= t
-            prob += avg - T(day) <= -t
-            # prob += T(int(row[-1]))
+        for row in rows:
+            avg, day = float(row[-2]), float(row[-1])
+            prob += z >= (avg - T(day))
+            prob += z >= -(avg - T(day))
 
         status = prob.solve()
-        print LpStatus[status]
-        print value(prob.objective)
+        print "Status %s" % LpStatus[status]
+        print "Objective %s" % prob.objective
+        print "Objective (value) %s" % value(prob.objective)
+        print "Values:"
         print value(x0)
         print value(x1)
         print value(x2)
         print value(x3)
         print value(x4)
         print value(x5)
-        print t
-
+        print value(z)
 
 
 if len(sys.argv) < 2:
