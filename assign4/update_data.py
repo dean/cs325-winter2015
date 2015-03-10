@@ -1,20 +1,31 @@
 import sys
 import csv
+from datetime import datetime
+
+
+def convert_to_temp(temp):
+    temp = float(temp) / 10.0
+    return round(temp, 2)
+
+
+def get_avg_temp(tmax, tmin):
+    avg = (tmax + tmin) / 2
+    return round(avg, 2)
 
 
 def get_data(reader):
     rows = []
     first_day = None
     for row in reader:
-        curr_day = int(row[-3])
+        curr_day = datetime.strptime(row[-3], "%Y%m%d")
         if first_day is None:
             first_day = curr_day
 
-        tmax, tmin = row[-2:]
-        avg = (float(tmax)-float(tmin))/2
-        day = curr_day - first_day
+        tmax, tmin = map(convert_to_temp, row[-2:])
+        avg = get_avg_temp(tmax, tmin)
+        delta = curr_day - first_day
         row.append(avg)
-        row.append(day)
+        row.append(delta.days)
         rows.append(row)
     return rows
 

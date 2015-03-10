@@ -40,7 +40,7 @@ def solve(rows):
         prob += (z >= -diff)
 
     status = prob.solve()
-    return LpStatus[status], map(value, xs)
+    return LpStatus[status], value(z), map(value, xs)
 
 
 def process_file(f):
@@ -54,30 +54,12 @@ def process_file(f):
     return rows
 
 
-def get_data(f):
-    rows = []
-    with open(f, 'rb') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',')
-        reader.next()
-        first_day = None
-        for row in reader:
-            if first_day is None:
-                first_day = int(row[-2])
-
-            tmax, tmin = row[-2:]
-            avg = (float(tmax)-float(tmin))/2
-            day = first_day - int(row[-2])
-            row.append(avg)
-            row.append(day)
-            rows.append(row)
-    return rows
-
-
 def main(args):
     rows = process_file(args[0])
-    status, lp_x_values = solve(rows)
+    status, total, lp_x_values = solve(rows)
 
     print "Status %s" % status
+    print "Total %s" % total
     print "Values:"
     for i in xrange(6):
         print "x%d value: %s" % (i, lp_x_values[i])
