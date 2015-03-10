@@ -4,14 +4,17 @@ import math
 from pulp import *
 
 
+def linear_part(day, x0, x1):
+        return (x1 * day) + x0
+
+
 def t(day, x0, x1, x2, x3, x4, x5):
     return (
         (x5 * math.sin((2 * math.pi * day) / (365.25 * 10.7))) +
         (x4 * math.cos((2 * math.pi * day) / (365.25 * 10.7))) +
         (x3 * math.sin((2 * math.pi * day) / 365.25)) +
         (x2 * math.cos((2 * math.pi * day) / 365.25)) +
-        (x1 * day) +
-        x0
+        linear_part(day, x0, x1)
     )
 
 
@@ -48,6 +51,25 @@ def process_file(f):
         reader.next()
         for row in reader:
             rows.append(map(float, row[-2:]))
+    return rows
+
+
+def get_data(f):
+    rows = []
+    with open(f, 'rb') as csvfile:
+        reader = csv.reader(csvfile, delimiter=',')
+        reader.next()
+        first_day = None
+        for row in reader:
+            if first_day is None:
+                first_day = int(row[-2])
+
+            tmax, tmin = row[-2:]
+            avg = (float(tmax)-float(tmin))/2
+            day = first_day - int(row[-2])
+            row.append(avg)
+            row.append(day)
+            rows.append(row)
     return rows
 
 

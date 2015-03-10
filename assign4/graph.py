@@ -7,9 +7,10 @@ import matplotlib.pyplot as plt
 import assignment4
 
 
-def make_graph(x1s, y1s, x2s, y2s):
-    plt.plot(x1s, y1s, color='blue')
-    plt.plot(x2s, y2s, color='red')
+def make_graph(days, avg, computed_avg, linear_y):
+    plt.plot(days, avg, color='blue')
+    plt.plot(days, computed_avg, color='red')
+    plt.plot(days, linear_y, color='green')
     plt.suptitle('Avg Temperature for Corvallis')
     plt.xlabel('Days')
     plt.ylabel('Avg Temp')
@@ -18,7 +19,7 @@ def make_graph(x1s, y1s, x2s, y2s):
 
 
 def get_calculated_data_points(days, lp_x_values):
-    return [assignment4.t(day, *lp_x_values) for day in days]
+    return
 
 
 if __name__ == '__main__':
@@ -35,6 +36,7 @@ if __name__ == '__main__':
 
     _, lp_x_values = assignment4.solve(rows)
 
-    computed_avgs = list(get_calculated_data_points(days, lp_x_values))
+    computed_avgs = [assignment4.t(d, *lp_x_values) for d in days]
+    linear_y = [assignment4.linear_part(d, *lp_x_values[:2]) for d in days]
 
-    make_graph(days, avgs, days, computed_avgs)
+    make_graph(days, avgs, computed_avgs, linear_y)
