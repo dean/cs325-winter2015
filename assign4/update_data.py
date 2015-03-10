@@ -17,6 +17,8 @@ def get_data(reader):
     rows = []
     first_day = None
     for row in reader:
+        if abs(int(row[-1])) == 9999 or abs(int(row[-2])) == 9999:
+            continue
         curr_day = datetime.strptime(row[-3], "%Y%m%d")
         if first_day is None:
             first_day = curr_day
