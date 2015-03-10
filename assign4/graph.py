@@ -8,9 +8,10 @@ import assignment4
 
 
 def make_graph(days, avg, computed_avg, linear_y, outputfile='timings.ps'):
-    plt.scatter(days, avg, color='blue', facecolor='0.5', lw=0.5, s=1)
+    plt.scatter(days, avg, color='blue', facecolor='0.5', lw=0.5, s=1, norm=False)
     plt.plot(days, computed_avg, color='red')
     plt.plot(days, linear_y, color='green')
+    plt.xlim(0, days[-1])
     plt.suptitle('Avg Temperature for Corvallis')
     plt.xlabel('Days')
     plt.ylabel('Avg Temp')
