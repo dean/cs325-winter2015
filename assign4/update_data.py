@@ -46,7 +46,7 @@ if __name__ == "__main__":
         header.append("average")
         header.append("day")
 
-    with open(sys.argv[2], "w") as csvfile:
+    with open(sys.argv[2], "w+") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         writer.writerow(header)
         writer.writerows(rows)
