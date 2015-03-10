@@ -28,11 +28,10 @@ def get_differences(rows, xs):
 
 def solve(rows):
     prob = LpProblem("Local Temperature Change", LpMinimize)
-    z = LpVariable("z")
+    z = LpVariable("z", 0)
     xs = [LpVariable("x%d" % i, 0) for i in xrange(6)]
 
-    prob += z
-    prob += z >= 0
+    prob += z, "z is the maximum absolute deviation of the set"
 
     diffs = get_differences(rows, xs)
     for diff in diffs:
