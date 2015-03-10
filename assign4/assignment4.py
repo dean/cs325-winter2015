@@ -33,9 +33,6 @@ def solve(rows):
 
     diffs = get_differences(rows, xs)
     for diff in diffs:
-        # print diff
-        # print -diff
-        # return
         prob += (z >= diff)
         prob += (z >= -diff)
 
